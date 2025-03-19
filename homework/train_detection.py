@@ -2,9 +2,9 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
 
-from homework.models import Detector, save_model
-from homework.datasets.road_dataset import load_data
-from homework.metrics import DetectionMetric
+from models import Detector, save_model
+from datasets.road_dataset import load_data
+from metrics import DetectionMetric
 
 def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

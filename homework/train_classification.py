@@ -1,9 +1,9 @@
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
-from homework.models import Classifier, save_model
-from homework.datasets.classification_dataset import load_data
-from homework.metrics import AccuracyMetric
+from models import Classifier, save_model
+from datasets.classification_dataset import load_data
+from metrics import AccuracyMetric
 
 def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
