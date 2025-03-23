@@ -6,9 +6,9 @@ import numpy as np
 import torch
 import torch.utils.tensorboard as tb
 
-from models import load_model, save_model
-from datasets.classification_dataset import load_data
-from metrics import AccuracyMetric
+from .models import load_model, save_model
+from .datasets.classification_dataset import load_data
+from .metrics import AccuracyMetric
 
 
 def train(
@@ -58,8 +58,20 @@ def train(
     model.train()
 
     # load training and validation data
-    train_data = load_data(split="train", transform_pipeline="train", batch_size=batch_size, shuffle=True, num_workers=2)
-    val_data = load_data(split="val", transform_pipeline="val", batch_size=batch_size, shuffle=False, num_workers=2)
+    train_data = load_data(
+        dataset_path="classification_data/train",
+        transform_pipeline="aug",
+        batch_size=batch_size,
+        shuffle=True,
+        num_workers=2,
+    )
+    val_data = load_data(
+        dataset_path="classification_data/val",
+        transform_pipeline="default",
+        batch_size=batch_size,
+        shuffle=False,
+        num_workers=2,
+    )
 
     # loss function and optimizer
     criterion = torch.nn.CrossEntropyLoss()
@@ -75,7 +87,8 @@ def train(
 
         model.train()
         for batch in train_data:
-            img, label = batch["image"].to(device), batch["label"].to(device)
+            img, label = batch
+            img, label = img.to(device), label.to(device)
 
             optimizer.zero_grad()
             logits = model(img)
@@ -100,7 +113,9 @@ def train(
 
         with torch.inference_mode():
             for batch in val_data:
-                img, label = batch["image"].to(device), batch["label"].to(device)
+                img, label = batch
+                img, label = img.to(device), label.to(device)
+
                 logits = model(img)
                 loss = criterion(logits, label)
                 val_losses.append(loss.item())

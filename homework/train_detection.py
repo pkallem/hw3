@@ -6,9 +6,9 @@ import numpy as np
 import torch
 import torch.utils.tensorboard as tb
 
-from models import load_model, save_model
-from datasets.road_dataset import load_data
-from metrics import DetectionMetric
+from .models import load_model, save_model
+from .datasets.road_dataset import load_data
+from .metrics import DetectionMetric
 
 
 def train(
@@ -58,9 +58,20 @@ def train(
     model.train()
 
     # load training and validation data
-    train_data = load_data(split="train", batch_size=batch_size, shuffle=True, num_workers=2)
-    val_data = load_data(split="val", batch_size=batch_size, shuffle=False, num_workers=2)
-
+    train_data = load_data(
+        dataset_path="classification_data/train",
+        transform_pipeline="aug",
+        batch_size=batch_size,
+        shuffle=True,
+        num_workers=2,
+    )
+    val_data = load_data(
+        dataset_path="classification_data/val",
+        transform_pipeline="default",
+        batch_size=batch_size,
+        shuffle=False,
+        num_workers=2,
+    )
     # two losses
     seg_criterion = torch.nn.CrossEntropyLoss()
     depth_criterion = torch.nn.L1Loss()
