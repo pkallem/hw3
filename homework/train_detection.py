@@ -59,14 +59,14 @@ def train(
 
     # load training and validation data
     train_data = load_data(
-        dataset_path="classification_data/train",
-        transform_pipeline="aug",
+        dataset_path="drive_data/train",
+        transform_pipeline="default",
         batch_size=batch_size,
         shuffle=True,
         num_workers=2,
     )
     val_data = load_data(
-        dataset_path="classification_data/val",
+        dataset_path="drive_data/val",
         transform_pipeline="default",
         batch_size=batch_size,
         shuffle=False,
